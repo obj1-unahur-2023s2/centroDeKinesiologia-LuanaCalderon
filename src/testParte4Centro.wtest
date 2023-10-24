@@ -1,0 +1,50 @@
+import aparatos.*
+import pacientes.*
+import centro.*
+
+describe "test del centro de kinesiologia" {
+	const biciLeonardo = new Bicicleta()
+	const rutinaLeonardo = [biciLeonardo,new MiniTramp(),biciLeonardo,new Magneto()]
+	const rutinaJulian = [new Bicicleta(color="rojo"), new Magneto(color="verde"), new Bicicleta()]
+	const nicolas = new PacienteResistente(edad=40,nivelDeFortaleza=20,nivelDeDolor=10,rutina=rutinaLeonardo)
+	const victoria =  new PacienteCaprichoso(edad=30,nivelDeFortaleza=40,nivelDeDolor=10,rutina=rutinaLeonardo)
+	const julian =  new PacienteCaprichoso(edad=20,nivelDeFortaleza=50,nivelDeDolor=54,rutina=rutinaJulian)
+	const zoe = new RapidaRecuperacion(edad=50,nivelDeFortaleza=40,nivelDeDolor=14,rutina=rutinaLeonardo)
+	const rutinaMilena = [rutinaLeonardo.get(3), biciLeonardo]
+	const milena = new Paciente(edad=3,nivelDeFortaleza=50,nivelDeDolor=30,rutina=rutinaMilena)
+	
+
+method initialize() {
+		coeficienteDeRecuperacion.valor(2)
+		centro.agregarUnAparato(biciLeonardo)
+		centro.agregarUnAparato(rutinaLeonardo.get(1))
+		centro.agregarUnAparato(rutinaLeonardo.get(3))
+		centro.agregarAparatos(rutinaJulian)
+		centro.agregarAparatos(rutinaMilena)
+		centro.agregarPacientes(#{nicolas,victoria,julian,zoe,milena})
+	}
+	
+	test "los aparatos son de colores blanco, rojo y verde" {
+		assert.equals(#{"blanco","rojo","verde"},centro.coloresDeAparatos())
+	}
+	
+	test "la unica paciente menor a 8 años es milena" {
+		assert.equals(#{milena},centro.pacientesMenoresDe8Anios())
+	}
+	
+	test "victoria y milena no pueden hacer la rutina, cantidad 2" {
+		assert.equals(2,centro.cantidadPacientesQueNoPuedenHacerRutina())
+	}
+	
+	test "el centro está optimo, no necesita mantenimiento" {
+		assert.that(centro.estaOptimo())
+	}
+	
+	test "luego de 750 rutinas, el centro está complicado. Va el tecnico y ya no lo está" {
+		(1..750).forEach({i=>nicolas.realizarRutina();julian.realizarRutina()})
+		assert.that(centro.estaComplicado())
+		centro.visitaTecnico()
+		assert.notThat(centro.estaComplicado())
+	}
+	
+}

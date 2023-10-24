@@ -1,0 +1,63 @@
+import aparatos.*
+import pacientes.*
+
+describe "test de etapa 3" {
+	const biciLeonardo = new Bicicleta()
+	const rutinaLeonardo = [biciLeonardo,new MiniTramp(),biciLeonardo,new Magneto()]
+	const rutinaJulian = [new Bicicleta(color="rojo"), new Magneto(color="verde"), new Bicicleta()]
+	const nicolas = new PacienteResistente(edad=40,nivelDeFortaleza=20,nivelDeDolor=10,rutina=rutinaLeonardo)
+	const victoria =  new PacienteCaprichoso(edad=30,nivelDeFortaleza=40,nivelDeDolor=10,rutina=rutinaLeonardo)
+	const julian =  new PacienteCaprichoso(edad=20,nivelDeFortaleza=50,nivelDeDolor=54,rutina=rutinaJulian)
+	const zoe = new RapidaRecuperacion(edad=50,nivelDeFortaleza=40,nivelDeDolor=14,rutina=rutinaLeonardo)
+	
+	method initialize() {
+		coeficienteDeRecuperacion.valor(2)
+	}
+	
+	test "Nicolás puede hacer la rutina que tiene asignada" {
+		assert.that(nicolas.puedeHacerRutina())
+	}
+	
+	test "Nicolas realiza rutina, su nivel de dolor baja a 1.8" {
+		nicolas.realizarRutina()
+		assert.equals(1.8,nicolas.nivelDeDolor())
+	}
+	
+	test "Nicolas realiza rutina, su fortaleza sube a 34" {
+		nicolas.realizarRutina()
+		assert.equals(34,nicolas.nivelDeFortaleza())
+	}
+	
+	test "Victoria no puede hacer la rutina asignada" {
+		assert.notThat(victoria.puedeHacerRutina())
+	}
+
+	test "Julian puede hacer la rutina asignada" {
+		assert.that(julian.puedeHacerRutina())
+	}
+	
+	test "Julian realiza rutina, su nivel de dolor baja a 29.3" {
+		julian.realizarRutina()
+		assert.equals(29.3,julian.nivelDeDolor())
+	}
+	
+	test "Julian realiza rutina, su fortaleza sube a 62" {
+		julian.realizarRutina()
+		assert.equals(62,julian.nivelDeFortaleza())
+	}
+	
+	test "Zoe puede hacer la rutina asignada" {
+		assert.that(zoe.puedeHacerRutina())
+	}
+	
+	test "Zoe realiza rutina, su nivel de dolor baja a 3.4 con valor de decremento == 2" {
+		zoe.realizarRutina()
+		assert.equals(3.4,zoe.nivelDeDolor())
+	}
+	
+	test "Zoe realiza rutina, su fortaleza sube a 51" {
+		zoe.realizarRutina()
+		assert.equals(51,zoe.nivelDeFortaleza())
+	}
+	
+}
